@@ -1,0 +1,11 @@
+install_azure_cli:
+    brew update && brew install azure-cli
+
+step_2:
+    az login
+
+step_3:
+    az account set -s ${az_subscription_id}
+
+step4:
+    az ad sp create-for-rbac --name serverless-smsinfo
