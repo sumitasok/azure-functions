@@ -1,3 +1,4 @@
 exports
 **/*.log
 azure-functions-core-tools/.telemetry/
+azure-docker-function/azure-functions-core-tools/.telemetry/
