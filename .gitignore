@@ -1,2 +1,3 @@
 exports
 **/*.log
+azure-functions-core-tools/.telemetry/
