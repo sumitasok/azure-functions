@@ -4,11 +4,12 @@
 # 00 -> stage id
 # 	eg: 00 - prod; 01 - staging; 02 - dev; 03 - testing; 04+ - custom
 # yyy -> location; eg wus -> west us
-
+PRODUCT=${PRODUCT_ENV}
 RESOURCE_GROUP_NAME=AzureFunctionsQuickstart-rg
-CONTAINER_SERVICE_NAME=cartos0helloworld
+CONTAINER_SERVICE_NAME=${PRODUCT}0helloworld
 REPOSITORY_NAME=dockerpysample
-IMAGE_VERSION=v1
+# if you want to use per deployment(staging|dev|production) tags, specify below.
+IMAGE_VERSION=latest
 ACR_DOCKER_IMAGE=${CONTAINER_SERVICE_NAME}.azurecr.io/${REPOSITORY_NAME}:${IMAGE_VERSION}
 CONTAINER_USERNAME=${CONTAINER_SERVICE_NAME}
 
@@ -45,7 +46,7 @@ RESOURCE_GROUP_NAME=AzureFunctionsWestEU-rg
 step_4_1:
 	az group create --name ${RESOURCE_GROUP_NAME} --location ${LOCATION}
 
-STORAGE_NAME=cartos03weudockerpystora
+STORAGE_NAME=${PRODUCT}03weudockerpystora
 step_5: # create storage
 	az storage account create \
 		--name ${STORAGE_NAME} \
@@ -61,7 +62,7 @@ step_6: # create function plan
 		--location ${LOCATION} \
 		--number-of-workers 1 --sku EP1 --is-linux
 
-FUNC_NAME=cartos03wusdockerpyfunc
+FUNC_NAME=${PRODUCT}03wusdockerpyfunc
 FUNC_PLAN_NAME=WestUSLinuxDynamicPlan
 step_7:
 	az functionapp create \
@@ -81,3 +82,8 @@ step_9:
 		--name ${FUNC_NAME} \
 		--resource-group ${RESOURCE_GROUP_NAME} \
 		--settings AzureWebJobsStorage=${STORAGE_CONNECTION_STRING}
+
+step_10:
+	az functionapp deployment container config \
+		--enable-cd --query CI_CD_URL --output tsv \
+		--name ${FUNC_NAME} --resource-group ${RESOURCE_GROUP_NAME}

@@ -17,4 +17,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         else:
             name = req_body.get('name')
 
-    return func.HttpResponse(f"Hello {str(np.array([1,2,3,4]))}!")
+    return func.HttpResponse(f"Hello {str(np.array(list(range(12))))}!")
