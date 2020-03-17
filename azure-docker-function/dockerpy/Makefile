@@ -4,6 +4,17 @@
 # 00 -> stage id
 # 	eg: 00 - prod; 01 - staging; 02 - dev; 03 - testing; 04+ - custom
 # yyy -> location; eg wus -> west us
+
+
+# Requirements
+# - Resource Group
+# - Azure Container Registry - with capability for any number of repositories.
+# - Storage Account - Standard_LRS (ability to create multiple containers is preferred).
+# - FunctionApp Plan --number-of-workers 1 --sku EP1 --is-linux (should be able to increase the number of workers later)
+# - ability to create functions in the above Plan
+# - CosmosDB - high availability
+
+
 PRODUCT=${PRODUCT_ENV}
 RESOURCE_GROUP_NAME=AzureFunctionsQuickstart-rg
 CONTAINER_SERVICE_NAME=${PRODUCT}0helloworld
