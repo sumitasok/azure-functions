@@ -3,3 +3,4 @@ exports
 azure-functions-core-tools/.telemetry/
 azure-docker-function/azure-functions-core-tools/.telemetry/
 azure-docker-function/dockerpy/azure-functions-core-tools/.telemetry
+.env
