@@ -1,0 +1,7 @@
+FROM python:3.8.0-alpine3.10
+
+RUN pip install pymongo
+RUN pip install dnspython
+RUN pip install pymodm
+
+WORKDIR /src
