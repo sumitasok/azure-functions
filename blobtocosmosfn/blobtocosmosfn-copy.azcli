@@ -1,0 +1,32 @@
+# Load all environment variables.
+set -a;source .env; set +a
+
+az storage account create --name $STORAGE_ACCOUNT --location $REGION --resource-group $RESOURCE_GROUP --sku Standard_LRS
+
+ACCESS_KEY=$(az storage account keys list --account-name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --output tsv |head -1 | awk '{print $3}')
+
+az storage container create --name "upload-images" --account-name $STORAGE_ACCOUNT --account-key $ACCESS_KEY
+
+# Create Cosmos DB Account and DB & Collection
+
+az cosmosdb create --name $COSMOSDB_ACCOUNT_NAME --kind GlobalDocumentDB --resource-group $RESOURCE_GROUP
+
+# Get Key
+COSMOSDB_KEY=$(az cosmosdb list-keys --name $COSMOSDB_ACCOUNT_NAME --resource-group $RESOURCE_GROUP --output tsv |awk '{print $1}')
+
+# Create Database
+az cosmosdb database create --name $COSMOSDB_ACCOUNT_NAME --db-name $DATABASE_NAME --key $COSMOSDB_KEY --resource-group $RESOURCE_GROUP
+
+# Create a container with a partition key and provision 400 RU/s throughput.
+az cosmosdb collection create --resource-group $RESOURCE_GROUP --collection-name $COLLECTION_NAME --name $COSMOSDB_ACCOUNT_NAME --db-name $DATABASE_NAME --partition-key-path /name --throughput 400
+
+# Create a container for leaves
+# 'leaves' need to be a single collection partition
+# Please see also: https://github.com/Azure/azure-functions-core-tools/issues/930
+az cosmosdb collection create --resource-group $RESOURCE_GROUP --collection-name $LEASES_COLLECTION_NAME --name $COSMOSDB_ACCOUNT_NAME --db-name $DATABASE_NAME --throughput 400
+
+az webapp config appsettings set \
+  -n $FUNCTION_APP_NAME \
+  -g $RESOURCE_GROUP \
+  --settings \
+    MyCosmosDBConnectionString=$COSMOS_DB_CONNECTION
