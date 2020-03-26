@@ -9,6 +9,20 @@
       "connection": "AzureWebJobsStorage"
     },
     {
+      "type": "eventHubTrigger",
+      "name": "event",
+      "direction": "in",
+      "eventHubName": "multiblobstorageevent",
+      "connection": "myEventHubReadConnectionAppSetting"
+    },
+    {
+      "name": "myOutblob",
+      "type": "blob",
+      "direction": "out",
+      "path": "raster-derived/{name}",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
       "direction": "out",
       "type": "cosmosDB",
       "name": "doc",
