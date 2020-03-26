@@ -1,0 +1,10 @@
+version: '2'
+
+services: 
+    localBlobStorageTest:
+        image: localblobbtoragetest
+        build: .
+        command: python main.py
+        volumes: 
+            - .:/src
+            - ./data.nosync:/tmp
