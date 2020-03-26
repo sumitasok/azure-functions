@@ -7,5 +7,3 @@ azure-docker-function/dockerpy/azure-functions-core-tools/.telemetry
 .python_packages
 __pycache__
 .vscode
-azure-functions-core-tools/.telemetry/*
-azure-functions-core-tools/.telemetry/20200312090953_f588bfa6714c4d40b85016c798370fdb.trn
